@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPH Module 1: Bangsamoro History and Peace Process Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <h1 id="module-title">RPH Module 1: Bangsamoro History and Peace Process Quiz</h1>
+        <div class="progress" id="progress">Question 1 of 48</div>
+        <div id="question-container">
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+            <div class="button-container">
+                <button id="next-btn" class="hidden">Next Question</button>
+                <button id="reset-btn">Reset Quiz</button>
+            </div>
+        </div>
+        <div id="result" class="result hidden"></div>
+    </div>
+
+    <script src="quiz_engine.js"></script>
+    <script>
+        // Module 1 Questions
+        const quizQuestions = [
+            {
+                question: "What is the Bangsamoro?",
+                options: ["A region in the Philippines inhabited mainly by Muslims in Mindanao with a distinct history and identity", "A sultanate in Luzon", "A political party in Manila", "A type of Filipino cuisine"],
+                answer: 0
+            },
+            {
+                question: "What disrupted the autonomy of the Bangsamoro?",
+                options: ["Spanish and American colonization", "Natural disasters", "Internal conflicts", "Economic booms"],
+                answer: 0
+            },
+            {
+                question: "What factors contributed to the Bangsamoro's resistance and demand for self-determination?",
+                options: ["Loss of ancestral lands and lack of control over resources", "Overpopulation", "Technological advancements", "International trade"],
+                answer: 0
+            },
+            {
+                question: "What was the main goal of the Moro National Liberation Front (MNLF)?",
+                options: ["Independence", "Economic reforms", "Educational improvements", "Healthcare expansion"],
+                answer: 0
+            },
+            {
+                question: "What did the 1976 Tripoli Agreement grant to the MNLF?",
+                options: ["Limited autonomy", "Full independence", "Military aid", "Economic sanctions"],
+                answer: 0
+            },
+            {
+                question: "What was the outcome of the 1996 Final Peace Agreement?",
+                options: ["Creation of the Autonomous Region in Muslim Mindanao (ARMM)", "Formation of BARMM", "Dissolution of MNLF", "International intervention"],
+                answer: 0
+            },
+            {
+                question: "Why did the Moro Islamic Liberation Front (MILF) split from the MNLF?",
+                options: ["Disagreements over peace talks", "Leadership disputes", "Ideological differences", "Financial issues"],
+                answer: 0
+            },
+            {
+                question: "What agreement paved the way for the Bangsamoro Organic Law (BOL) and BARMM?",
+                options: ["2014 Comprehensive Agreement on the Bangsamoro (CAB)", "1976 Tripoli Agreement", "1996 Final Peace Agreement", "2001 Peace Accord"],
+                answer: 0
+            },
+            {
+                question: "What type of system does BARMM operate under?",
+                options: ["Parliamentary system", "Presidential system", "Monarchical system", "Confederate system"],
+                answer: 0
+            },
+            {
+                question: "Who was the founder of the Moro National Liberation Front (MNLF)?",
+                options: ["Nur Misuari", "Salamat Hashim", "Fidel V. Ramos", "Benigno Aquino III"],
+                answer: 0
+            }
+        ];
+
+        initializeQuiz(quizQuestions);
+    </script>
+</body>
+</html>

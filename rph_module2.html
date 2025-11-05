@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPH Module 2 Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <h1 id="module-title">RPH Module 2 Quiz</h1>
+        <div class="progress" id="progress">Question 1 of 0</div>
+        <div id="question-container">
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+            <div class="button-container">
+                <button id="next-btn" class="hidden">Next Question</button>
+                <button id="reset-btn">Reset Quiz</button>
+            </div>
+        </div>
+        <div id="result" class="result hidden"></div>
+    </div>
+
+    <script src="quiz_engine.js"></script>
+    <script src="rph_module2_questions.js"></script>
+    <script>
+        initializeQuiz(window.module2Questions);
+    </script>
+</body>
+</html>
