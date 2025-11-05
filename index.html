@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPH Quiz System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <h1 id="module-title">RPH Module 1: Bangsamoro History and Peace Process Quiz</h1>
+        <div class="subject-buttons">
+            <button id="rph-btn" class="subject-btn active">RPH</button>
+            <button id="hci-btn" class="subject-btn">HCI</button>
+        </div>
+        <div class="module-buttons">
+            <button id="module1-btn" class="module-btn active">Module 1</button>
+            <button id="module2-btn" class="module-btn">Module 2</button>
+        </div>
+        <div class="progress" id="progress">Question 1 of 48</div>
+        <div id="question-container">
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+            <div class="button-container">
+                <button id="next-btn" class="hidden">Next Question</button>
+                <button id="reset-btn">Reset Quiz</button>
+            </div>
+        </div>
+        <div id="result" class="result hidden"></div>
+    </div>
+
+    <script src="rph_module1_questions.js"></script>
+    <script src="rph_module2_questions.js"></script>
+    <script src="hci_module1_questions.js"></script>
+    <script src="hci_module2_questions.js"></script>
+    <script>
+        let currentSubject = 'rph';
+        let currentModule = 1;
+
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const nextBtn = document.getElementById('next-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const resultEl = document.getElementById('result');
+        const progressEl = document.getElementById('progress');
+        const moduleTitleEl = document.getElementById('module-title');
+        const rphBtn = document.getElementById('rph-btn');
+        const hciBtn = document.getElementById('hci-btn');
+        const module1Btn = document.getElementById('module1-btn');
+        const module2Btn = document.getElementById('module2-btn');
+
+        function getQuestions(subject, module) {
+            if (subject === 'rph') {
+                return module === 1 ? window.module1Questions : window.module2Questions;
+            } else if (subject === 'hci') {
+                return module === 1 ? window.hciModule1Questions : window.hciModule2Questions;
+            }
+        }
+
+        function switchSubject(subject) {
+            currentSubject = subject;
+            // Update button states
+            rphBtn.classList.toggle('active', subject === 'rph');
+            hciBtn.classList.toggle('active', subject === 'hci');
+
+            // Update title and load questions
+            switchModule(currentModule);
+        }
+
+        function switchModule(moduleNumber) {
+            currentModule = moduleNumber;
+            // Update button states
+            module1Btn.classList.toggle('active', moduleNumber === 1);
+            module2Btn.classList.toggle('active', moduleNumber === 2);
+
+            // Update title
+            if (currentSubject === 'rph') {
+                moduleTitleEl.textContent = `RPH Module ${moduleNumber}: ${moduleNumber === 1 ? 'Bangsamoro History and Peace Process' : 'People Power Revolution and Philippine Presidents'} Quiz`;
+            } else if (currentSubject === 'hci') {
+                moduleTitleEl.textContent = `HCI Module ${moduleNumber}: ${moduleNumber === 1 ? 'Introduction to Human-Computer Interaction' : 'Advanced Human-Computer Interaction'} Quiz`;
+            }
+
+            // Load appropriate questions
+            loadModuleQuestions(moduleNumber);
+        }
+
+        function loadModuleQuestions(moduleNumber) {
+            let questions = getQuestions(currentSubject, moduleNumber);
+            if (questions && questions.length > 0) {
+                initializeQuiz(questions);
+            } else {
+                console.error('Questions not loaded for', currentSubject, 'module', moduleNumber);
+            }
+        }
+
+        function initializeQuiz(questions) {
+            shuffledQuestions = shuffleArray(questions);
+            shuffledOptions = shuffledQuestions.map(q => shuffleArray(q.options.map((opt, idx) => ({ text: opt, originalIndex: idx }))));
+            currentQuestion = 0;
+            score = 0;
+            selectedOption = null;
+            document.getElementById('question-container').classList.remove('hidden');
+            resultEl.classList.add('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = shuffledQuestions[currentQuestion];
+            const options = shuffledOptions[currentQuestion];
+            questionEl.textContent = q.question;
+            progressEl.textContent = `Question ${currentQuestion + 1} of ${shuffledQuestions.length}`;
+            optionsEl.innerHTML = '';
+            selectedOption = null;
+            nextBtn.classList.add('hidden');
+
+            options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'option';
+                optionEl.textContent = option.text;
+                optionEl.addEventListener('click', () => selectOption(optionEl, index, option.originalIndex));
+                optionsEl.appendChild(optionEl);
+            });
+        }
+
+        function selectOption(optionEl, index, originalIndex) {
+            // Remove previous selection
+            document.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+            optionEl.classList.add('selected');
+            selectedOption = originalIndex;
+
+            // Show next button
+            nextBtn.classList.remove('hidden');
+        }
+
+        function checkAnswer() {
+            const q = shuffledQuestions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+
+            options.forEach((option, index) => {
+                const originalIndex = shuffledOptions[currentQuestion][index].originalIndex;
+                if (originalIndex === q.answer) {
+                    option.classList.add('correct');
+                } else if (originalIndex === selectedOption) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            if (selectedOption === q.answer) {
+                score++;
+            }
+        }
+
+        function nextQuestion() {
+            checkAnswer();
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < shuffledQuestions.length) {
+                    loadQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1000);
+        }
+
+        function showResult() {
+            document.getElementById('question-container').classList.add('hidden');
+            resultEl.classList.remove('hidden');
+            resultEl.textContent = `Quiz completed! Your score: ${score}/${shuffledQuestions.length}`;
+        }
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Event listeners
+        rphBtn.addEventListener('click', () => switchSubject('rph'));
+        hciBtn.addEventListener('click', () => switchSubject('hci'));
+        nextBtn.addEventListener('click', nextQuestion);
+        resetBtn.addEventListener('click', () => switchModule(currentModule));
+        module1Btn.addEventListener('click', () => switchModule(1));
+        module2Btn.addEventListener('click', () => switchModule(2));
+
+        // Ensure questions are loaded before initializing
+        window.addEventListener('load', () => {
+            console.log('Window loaded, checking for questions...');
+            console.log('module1Questions:', window.module1Questions ? window.module1Questions.length : 'undefined');
+            console.log('module2Questions:', window.module2Questions ? window.module2Questions.length : 'undefined');
+            if (window.module1Questions && window.module2Questions) {
+                console.log('Both modules loaded, initializing Module 1');
+                switchModule(1);
+            } else {
+                console.log('Questions not ready, waiting...');
+                setTimeout(() => {
+                    console.log('Timeout check - module1Questions:', window.module1Questions ? window.module1Questions.length : 'undefined');
+                    console.log('module2Questions:', window.module2Questions ? window.module2Questions.length : 'undefined');
+                    switchModule(1);
+                }, 100); // Small delay to ensure scripts loaded
+            }
+        });
+
+        // Also initialize when the tab becomes visible (in case it was loaded in background)
+        document.addEventListener('visibilitychange', () => {
+            console.log('Visibility change event fired, document.hidden:', document.hidden, 'questionEl.textContent:', questionEl.textContent);
+            if (!document.hidden && !questionEl.textContent && window.module1Questions && window.module2Questions) {
+                console.log('Visibility change triggered, switching to Module 1');
+                switchModule(1);
+            }
+        });
+
+    </script>
+</body>
+</html>
